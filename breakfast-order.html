@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breakfast Order</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --cream:#FBF6EE;
+    --egg:#F4E3C8;
+    --yolk:#D98A33;
+    --jam:#A8442B;
+    --ink:#2E2620;
+    --leaf:#5C6B4F;
+    --line:#E1D3B8;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .wrap{
+    max-width:480px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:28px;
+  }
+  header .eyebrow{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--leaf);
+    font-weight:600;
+  }
+  header h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:34px;
+    margin:6px 0 4px;
+    line-height:1.05;
+  }
+  header p{
+    margin:0;
+    font-size:14px;
+    color:#6b5f4f;
+  }
+
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.02);
+  }
+
+  .section-title{
+    font-family:'Fraunces',serif;
+    font-size:17px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .section-sub{
+    font-size:12.5px;
+    color:#857served;
+    color:#8b7d68;
+    margin:0 0 14px;
+  }
+
+  /* room number pills */
+  .pills{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .pill{
+    flex:1 1 auto;
+    text-align:center;
+    padding:12px 0;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    background:var(--cream);
+    transition:all .15s ease;
+    min-width:48px;
+  }
+  .pill.selected{
+    background:var(--yolk);
+    border-color:var(--yolk);
+    color:#fff;
+  }
+
+  /* checkboxes */
+  .item{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+  }
+  .item:last-child{border-bottom:none;}
+  .item input{
+    margin-top:3px;
+    width:18px;
+    height:18px;
+    accent-color:var(--yolk);
+    flex-shrink:0;
+  }
+  .item-text strong{
+    display:block;
+    font-size:15px;
+  }
+  .item-text span{
+    font-size:12.5px;
+    color:#8b7d68;
+  }
+  .price-tag{
+    margin-left:auto;
+    font-size:13px;
+    font-weight:700;
+    color:var(--jam);
+    white-space:nowrap;
+    padding-left:8px;
+  }
+  .counter-row{
+    display:flex;
+    gap:12px;
+  }
+  .counter-block{
+    flex:1;
+  }
+  .counter-block label{
+    display:block;
+    font-size:12.5px;
+    color:#8b7d68;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+
+  .guest-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px 20px;
+    margin-bottom:14px;
+  }
+  .guest-label{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:15px;
+    margin-bottom:10px;
+  }
+  .radio-item{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+  }
+  .radio-item:last-child{border-bottom:none;}
+  .radio-item input{
+    margin-top:3px;
+    width:18px;
+    height:18px;
+    accent-color:var(--yolk);
+    flex-shrink:0;
+  }
+
+  .included-row{
+    font-size:13px;
+    color:var(--leaf);
+    background:#F1F3EB;
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:12px;
+  }
+
+  select{
+    width:100%;
+    padding:13px 14px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-size:15px;
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    appearance:none;
+  }
+
+  textarea{
+    width:100%;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-size:14px;
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    resize:none;
+    min-height:60px;
+  }
+
+  .send-btn{
+    width:100%;
+    padding:17px;
+    border:none;
+    border-radius:14px;
+    background:var(--jam);
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-top:4px;
+  }
+  .send-btn:active{transform:scale(0.98);}
+  .send-btn:disabled{
+    background:#cbbfa9;
+    cursor:not-allowed;
+  }
+
+  .pay-btn{
+    width:100%;
+    padding:15px;
+    border:1.5px solid var(--jam);
+    border-radius:14px;
+    background:#fff;
+    color:var(--jam);
+    font-size:15px;
+    font-weight:700;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    text-decoration:none;
+    display:block;
+    text-align:center;
+  }
+
+  .note{
+    font-size:12px;
+    color:#a08f76;
+    text-align:center;
+    margin-top:18px;
+    line-height:1.5;
+  }
+
+  .divider-label{
+    text-align:center;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#a08f76;
+    margin:26px 0 14px;
+    position:relative;
+  }
+  .divider-label::before, .divider-label::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:30%;
+    height:1px;
+    background:var(--line);
+  }
+  .divider-label::before{left:0;}
+  .divider-label::after{right:0;}
+
+  .toast{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(10px);
+    background:var(--ink);
+    color:#fff;
+    padding:12px 20px;
+    border-radius:30px;
+    font-size:13px;
+    opacity:0;
+    transition:all .25s ease;
+    pointer-events:none;
+    white-space:nowrap;
+  }
+  .toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Good morning</div>
+    <h1>Breakfast Order</h1>
+    <p>Select your room, choose your breakfast, and let us know what time to expect you.</p>
+  </header>
+
+  <!-- ROOM -->
+  <div class="card">
+    <div class="section-title">Room number</div>
+    <div class="section-sub">Tap your room</div>
+    <div class="pills" id="roomPills">
+      <div class="pill" data-room="1">1</div>
+      <div class="pill" data-room="2">2</div>
+      <div class="pill" data-room="3">3</div>
+      <div class="pill" data-room="4">4</div>
+      <div class="pill" data-room="5">5</div>
+    </div>
+  </div>
+
+  <!-- GUEST COUNT -->
+  <div class="card">
+    <div class="section-title">Who's eating?</div>
+    <div class="section-sub">Tell us how many adults and children, then choose breakfast for each</div>
+    <div class="counter-row">
+      <div class="counter-block">
+        <label>Adults</label>
+        <select id="adultCount"><option value="0">0</option><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select>
+      </div>
+      <div class="counter-block">
+        <label>Children</label>
+        <select id="childCount"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="included-row" style="margin:0 0 18px;">Every breakfast includes cereal, toast, fresh orange juice, and tea or coffee.</div>
+
+  <!-- MENU PER GUEST (generated by JS) -->
+  <div id="guestCards"></div>
+
+  <!-- TIME -->
+  <div class="card">
+    <div class="section-title">Breakfast time</div>
+    <div class="section-sub">Kitchen serves 7:30–9:30, in 30-minute sittings</div>
+    <select id="timeSelect">
+      <option value="" disabled selected>Choose a time</option>
+      <option value="7:30am">7:30am</option>
+      <option value="8:00am">8:00am</option>
+      <option value="8:30am">8:30am</option>
+      <option value="9:00am">9:00am</option>
+      <option value="9:30am">9:30am</option>
+    </select>
+  </div>
+
+  <!-- NOTES -->
+  <div class="card">
+    <div class="section-title">Anything else?</div>
+    <div class="section-sub">Allergies, extra guests, special requests</div>
+    <textarea id="notes" placeholder="e.g. one of us has a nut allergy"></textarea>
+  </div>
+
+  <button class="send-btn" id="sendBtn" disabled>
+    Send order on WhatsApp
+  </button>
+
+  <div class="divider-label">Paying for extras?</div>
+
+  <a class="pay-btn" id="payBtn" href="#" target="_blank" rel="noopener">
+    Pay for supplement items
+  </a>
+
+  <p class="note">If you've ordered the Irish hot breakfast, please pay the £5 per person supplement using the button above before tapping send.</p>
+
+</div>
+
+<div class="toast" id="toast">Opening WhatsApp…</div>
+
+<script>
+  // ---- CONFIG ----
+  const MUM_PHONE = "447927090189"; // no + or leading 0
+  const PAYMENT_LINK = "https://buy.stripe.com/fZueVd0v9eBL7zAgxTcEw00";
+
+  document.getElementById('payBtn').href = PAYMENT_LINK;
+
+  const MENU_OPTIONS = [
+    { label: "Scrambled eggs & toast", desc: "Free-range eggs, buttered toast" },
+    { label: "Continental — yoghurt & fresh fruit", desc: "Yoghurt & fresh fruit" },
+    { label: "Irish hot breakfast", desc: "The full works, cooked fresh", supplement: 5 }
+  ];
+
+  let selectedRoom = null;
+
+  document.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+      pill.classList.add('selected');
+      selectedRoom = pill.dataset.room;
+      checkReady();
+    });
+  });
+
+  function buildGuestCards(){
+    const adults = parseInt(document.getElementById('adultCount').value);
+    const children = parseInt(document.getElementById('childCount').value);
+    const container = document.getElementById('guestCards');
+    container.innerHTML = '';
+
+    let guestNum = 1;
+
+    for(let i=0;i<adults;i++){
+      container.appendChild(makeGuestCard(`Adult ${i+1}`, guestNum));
+      guestNum++;
+    }
+    for(let i=0;i<children;i++){
+      container.appendChild(makeGuestCard(`Child ${i+1}`, guestNum));
+      guestNum++;
+    }
+    checkReady();
+  }
+
+  function makeGuestCard(label, guestNum){
+    const card = document.createElement('div');
+    card.className = 'guest-card';
+    const radioName = `guest-${guestNum}`;
+
+    let html = `<div class="guest-label">${label} — choose one</div>`;
+    MENU_OPTIONS.forEach((opt, idx) => {
+      html += `
+        <label class="radio-item">
+          <input type="radio" name="${radioName}" value="${opt.label}${opt.supplement ? ' (+£'+opt.supplement+')' : ''}" class="guest-choice" data-group="${radioName}">
+          <div class="item-text">
+            <strong>${opt.label}${opt.supplement ? ' <span style="color:var(--jam)">+£'+opt.supplement+'</span>' : ''}</strong>
+            <span>${opt.desc}</span>
+          </div>
+        </label>`;
+    });
+    card.innerHTML = html;
+    card.querySelectorAll('.guest-choice').forEach(r => r.addEventListener('change', checkReady));
+    return card;
+  }
+
+  document.getElementById('adultCount').addEventListener('change', buildGuestCards);
+  document.getElementById('childCount').addEventListener('change', buildGuestCards);
+  document.getElementById('timeSelect').addEventListener('change', checkReady);
+
+  function checkReady(){
+    const time = document.getElementById('timeSelect').value;
+    const groups = new Set(Array.from(document.querySelectorAll('.guest-choice')).map(r => r.dataset.group));
+    let allAnswered = groups.size > 0;
+    groups.forEach(g => {
+      if(!document.querySelector(`input[name="${g}"]:checked`)) allAnswered = false;
+    });
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = !(selectedRoom && time && allAnswered);
+  }
+
+  document.getElementById('sendBtn').addEventListener('click', () => {
+    const time = document.getElementById('timeSelect').value;
+    const notes = document.getElementById('notes').value.trim();
+    const guestCards = document.querySelectorAll('.guest-card');
+
+    let msg = `🍳 Breakfast Order\n`;
+    msg += `Room: ${selectedRoom}\n`;
+    msg += `Time: ${time}\n`;
+    msg += `Guests:\n`;
+    guestCards.forEach(card => {
+      const guestLabel = card.querySelector('.guest-label').textContent.replace(' — choose one','');
+      const choice = card.querySelector('.guest-choice:checked');
+      msg += `  • ${guestLabel}: ${choice ? choice.value : '—'}\n`;
+    });
+    if(notes) msg += `Notes: ${notes}\n`;
+
+    const url = `https://wa.me/${MUM_PHONE}?text=${encodeURIComponent(msg)}`;
+
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+
+    window.open(url, '_blank');
+  });
+
+  // build initial guest cards on load
+  buildGuestCards();
+</script>
+
+</body>
+</html>
